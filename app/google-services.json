@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "431608964694",
+    "firebase_url": "https://realnews-18145.firebaseio.com",
+    "project_id": "realnews-18145",
+    "storage_bucket": "realnews-18145.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431608964694:android:3b1f1cae9028cbae",
+        "android_client_info": {
+          "package_name": "com.example.oscar.realnews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "431608964694-bt7vjtmqm3cp6p07ljg8t10fv3nnm1am.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.oscar.realnews",
+            "certificate_hash": "898744a899aa78a91c9628d00711f79c7724c10d"
+          }
+        },
+        {
+          "client_id": "431608964694-pbl12st9gqj1k6k8nd3ih71n4j0tg49b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvAqjn4s5lxoldf0GHJXZs1ANIrZenp2k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "431608964694-pbl12st9gqj1k6k8nd3ih71n4j0tg49b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

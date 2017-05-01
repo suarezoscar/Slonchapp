@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    tools:context="com.example.oscar.realnews.NewPostFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="9">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/button_add_image"
+                android:layout_width="300dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"
+                android:adjustViewBounds="true"
+                android:background="#00ffffff"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                android:soundEffectsEnabled="true"
+                android:src="@mipmap/image_add_btn" />
+
+            <EditText
+                android:id="@+id/editText_title_news"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/input_outline"
+                android:hint="Title ..."
+                android:inputType="textAutoCorrect|textAutoComplete"
+                android:padding="15dp"
+                android:textColor="@color/colorAccent" />
+
+            <EditText
+                android:id="@+id/editText_description_news"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/input_outline"
+                android:hint="Description ..."
+                android:inputType="textAutoCorrect|textAutoComplete|textMultiLine"
+                android:maxLength="140"
+                android:maxLines="4"
+                android:padding="15dp"
+                android:selectAllOnFocus="false"
+                android:textColor="@color/colorAccent" />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/button_submit_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="1"
+        android:background="@color/colorPrimaryDark"
+        android:text="Submit Post"
+        android:textColor="@color/colorAccent" />
+
+</LinearLayout>
+
