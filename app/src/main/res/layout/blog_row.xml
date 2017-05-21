@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -85,14 +85,17 @@
             <ImageView
                 android:id="@+id/post_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="360dp"
                 android:adjustViewBounds="true"
+                android:background="@drawable/loadingpic"
                 android:cropToPadding="true"
-                android:src="@mipmap/image_add_btn" />
+                android:hapticFeedbackEnabled="true"
+                android:scaleType="fitXY" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/post_description"
@@ -101,19 +104,21 @@
                     android:layout_margin="10dp"
                     android:text="Description goes here" />
 
-                <LinearLayout
-                    android:id="@+id/linearLayout"
-                    android:layout_width="wrap_content"
+                <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/post_description"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="horizontal">
+                    android:alignmentMode="alignBounds"
+                    android:columnCount="7"
+                    android:columnOrderPreserved="true"
+                    android:rowCount="2"
+                    android:useDefaultMargins="true">
 
                     <ImageButton
                         android:id="@+id/reaction_like"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_margin="5dp"
+                        android:layout_column="0"
+                        android:layout_row="0"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
@@ -126,7 +131,8 @@
                         android:id="@+id/reaction_lol"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_margin="5dp"
+                        android:layout_column="1"
+                        android:layout_row="0"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
@@ -139,7 +145,8 @@
                         android:id="@+id/reaction_love"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_margin="5dp"
+                        android:layout_column="2"
+                        android:layout_row="0"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
@@ -152,7 +159,8 @@
                         android:id="@+id/reaction_sad"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_margin="5dp"
+                        android:layout_column="3"
+                        android:layout_row="0"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
@@ -165,7 +173,8 @@
                         android:id="@+id/reaction_shit"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_margin="5dp"
+                        android:layout_column="4"
+                        android:layout_row="0"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
@@ -178,7 +187,8 @@
                         android:id="@+id/reaction_angry"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_margin="5dp"
+                        android:layout_column="5"
+                        android:layout_row="0"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
@@ -187,31 +197,13 @@
                         android:soundEffectsEnabled="true"
                         android:src="@drawable/bw_angry" />
 
-                    <TextView
-                        android:id="@+id/reactions_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:hapticFeedbackEnabled="true"
-                        android:text="123"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/linearLayout"
-                    android:layout_alignEnd="@+id/post_description"
-                    android:layout_margin="10dp"
-                    android:orientation="horizontal">
-
                     <ImageButton
                         android:id="@+id/button_comment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_column="6"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_row="0"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
@@ -219,16 +211,123 @@
                         android:soundEffectsEnabled="true"
                         android:src="@drawable/ic_comment" />
 
+
+                    <TextView
+                        android:id="@+id/reactions_count_like"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_row="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-thin"
+                        android:hapticFeedbackEnabled="true"
+                        android:text="123"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/reactions_count_lol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_row="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-thin"
+                        android:hapticFeedbackEnabled="true"
+                        android:text="123"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/reactions_count_love"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="2"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_row="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-thin"
+                        android:hapticFeedbackEnabled="true"
+                        android:text="123"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/reactions_count_sad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="3"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_row="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-thin"
+                        android:hapticFeedbackEnabled="true"
+                        android:text="123"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/reactions_count_shit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="4"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_row="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-thin"
+                        android:hapticFeedbackEnabled="true"
+                        android:text="123"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/reactions_count_angry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="5"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_row="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-thin"
+                        android:hapticFeedbackEnabled="true"
+                        android:text="123"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/comment_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="123"
+                        android:layout_column="6"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_row="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-thin"
+                        android:hapticFeedbackEnabled="true"
+                        android:text="0"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
-                </LinearLayout>
 
-            </RelativeLayout>
-        </LinearLayout>
+                </GridLayout>
+            </LinearLayout>
+
+        </TableLayout>
     </FrameLayout>
 
 

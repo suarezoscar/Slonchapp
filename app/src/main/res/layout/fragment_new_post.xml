@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    tools:context="com.example.oscar.realnews.NewPostFragment">
+    tools:context="com.example.oscar.realnews.PostFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -14,20 +14,59 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/button_add_image"
-                android:layout_width="300dp"
-                android:layout_height="160dp"
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="#000000"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/image_frame"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@mipmap/ic_launcher" />
+                >
+            </GridLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_margin="5dp"
-                android:adjustViewBounds="true"
-                android:background="#00ffffff"
-                android:cropToPadding="false"
-                android:scaleType="fitCenter"
-                android:soundEffectsEnabled="true"
-                android:src="@mipmap/image_add_btn" />
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/button_camera"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:cropToPadding="false"
+                    android:hapticFeedbackEnabled="true"
+                    android:scaleType="fitCenter"
+                    android:soundEffectsEnabled="true"
+                    android:src="@drawable/ic_camera" />
+
+                <ImageButton
+                    android:id="@+id/button_gallery"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:cropToPadding="false"
+                    android:hapticFeedbackEnabled="true"
+                    android:scaleType="fitCenter"
+                    android:soundEffectsEnabled="true"
+                    android:src="@drawable/ic_insert_photo_black_24dp" />
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/editText_title_news"

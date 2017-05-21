@@ -11,17 +11,13 @@ public class Post {
     private String desc;
     private String image;
     private String userId;
-    private String userPic;
-    private String userName;
     private String date;
 
-    public Post(String title, String desc, String image, String userId, String userPic, String userName, String date) {
+    public Post(String title, String desc, String image, String userId, String date) {
         this.title = title;
         this.desc = desc;
         this.image = image;
         this.userId = userId;
-        this.userPic = userPic;
-        this.userName = userName;
         this.date = date;
     }
 
@@ -60,21 +56,6 @@ public class Post {
         this.userId = userId;
     }
 
-    public String getUserPic() {
-        return userPic;
-    }
-
-    public void setUserPic(String userPic) {
-        this.userPic = userPic;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public String getDate() {
         return date;

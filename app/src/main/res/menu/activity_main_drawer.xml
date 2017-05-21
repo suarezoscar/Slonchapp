@@ -23,5 +23,6 @@
             android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:title="Logout" />
     </group>
-
+    <item android:title="@string/version"></item>
 </menu>
+
