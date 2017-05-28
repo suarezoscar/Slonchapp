@@ -33,6 +33,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,16 +51,30 @@ public class ProfileFragment extends Fragment {
 
 
     private static final String ARG_PARAM1 = "userID";
+    //<editor-fold desc="Variables">
+    private static Boolean IS_FRIEND = false;
+    private static String LOGGEDUSERID;
     private static InputMethodManager imm;
     private FirebaseAuth mAuth;
+    private FriendAdapter friendRequestAdapter;
+    private FriendAdapter friendAdapter;
+    private List friendRequest;
+    private List friends;
     private DatabaseReference mDatabaseUserProfile;
     private DatabaseReference mDatabaseUserPosts;
     private DatabaseReference mDatabaseUsers;
+    private DatabaseReference mDatabaseFriends;
+    private DatabaseReference mDatabaseFriendRequest;
     private RecyclerView mRecyclerViewUserPost;
+    private RecyclerView mRecyclerViewFriends;
+    private RecyclerView mRecyclerViewRequest;
     private boolean clicked = false;
     private Query mQueryUserPosts;
-    private Query mQueryuserSinglePost;
+    private Query mQueryFriend;
+    private LinearLayout linearLayout_friends;
+    private LinearLayout linearLayout_requests;
     private LinearLayout linear_contactprofile;
+    private LinearLayout linear_gallery;
     private String userID;
     private TextView username;
     private TextView userdesc;
@@ -71,9 +88,9 @@ public class ProfileFragment extends Fragment {
     private ImageButton button_declineFriend;
     private ImageButton button_cancelfriend;
     private LinearLayout linear_desc;
-
     private OnFragmentInteractionListener mListener;
     private ImageButton mButtonProfileDesc;
+    //</editor-fold>
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -99,7 +116,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseRecyclerAdapter<Post, ProfileViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Post, ProfileViewHolder>(
+        FirebaseRecyclerAdapter<Post, ProfileViewHolder> firebaseRecyclerAdapterPosts = new FirebaseRecyclerAdapter<Post, ProfileViewHolder>(
 
                 Post.class,
                 R.layout.pic_row,
@@ -113,6 +130,7 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         //comments fragments
+
                         mDatabaseUserPosts.orderByChild("image").equalTo(model.getImage()).addListenerForSingleValueEvent(new ValueEventListener() {
 
                             @Override
@@ -139,6 +157,7 @@ public class ProfileFragment extends Fragment {
                         });
                     }
                 });
+
                 viewHolder.image_picrow.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
@@ -189,11 +208,29 @@ public class ProfileFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
-        mRecyclerViewUserPost.setLayoutManager(layoutManager);
-        mRecyclerViewUserPost.setNestedScrollingEnabled(false);
-        mRecyclerViewUserPost.setHasFixedSize(false);
-        mRecyclerViewUserPost.setAdapter(firebaseRecyclerAdapter);
-        mRecyclerViewUserPost.setLayoutManager(new GridLayoutManager(getContext(), 3));
+
+        if (LOGGEDUSERID.equals(userID) || IS_FRIEND) {
+            linear_gallery.setVisibility(View.VISIBLE);
+            mRecyclerViewUserPost.setLayoutManager(layoutManager);
+            mRecyclerViewUserPost.setNestedScrollingEnabled(false);
+            mRecyclerViewUserPost.setHasFixedSize(false);
+            mRecyclerViewUserPost.setLayoutManager(new GridLayoutManager(getContext(), 3));
+            mRecyclerViewUserPost.setAdapter(firebaseRecyclerAdapterPosts);
+        }
+
+        mRecyclerViewRequest.setLayoutManager(layoutManager);
+        mRecyclerViewRequest.setNestedScrollingEnabled(false);
+        mRecyclerViewRequest.setHasFixedSize(false);
+        mRecyclerViewRequest.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerViewRequest.setAdapter(friendRequestAdapter);
+
+        mRecyclerViewFriends.setLayoutManager(layoutManager);
+        mRecyclerViewFriends.setNestedScrollingEnabled(false);
+        mRecyclerViewFriends.setHasFixedSize(false);
+        mRecyclerViewFriends.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerViewFriends.setAdapter(friendAdapter);
+
+
     }
 
     @Override
@@ -201,12 +238,64 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             userID = getArguments().getString(ARG_PARAM1);
-
         }
+
+        mDatabaseFriends = FirebaseDatabase.getInstance().getReference().child("Friends");
         mDatabaseUserProfile = FirebaseDatabase.getInstance().getReference().child("Users").child(userID);
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mDatabaseUserPosts = FirebaseDatabase.getInstance().getReference().child("Posts");
         mQueryUserPosts = mDatabaseUserPosts.orderByChild("userId").equalTo(userID);
+
+        mDatabaseFriendRequest = FirebaseDatabase.getInstance().getReference().child("Friends").child(userID);
+
+
+        //if this profile is the actual logged user profile.
+        if (userID.equals(LOGGEDUSERID)) {
+
+            mDatabaseFriendRequest.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    friendRequest.removeAll(friendRequest);
+                    friends.removeAll(friends);
+                    for (DataSnapshot d : dataSnapshot.getChildren()) {
+
+                        //if some request peding
+                        if (d.getValue().equals("pending")) {
+                            linearLayout_requests.setVisibility(View.VISIBLE);
+                            friendRequest.add(new Friend(d.getKey()));
+                            System.out.println(friendRequest.size() + " peticiones");
+                        }
+                        if (d.getValue().equals(true)) {
+                            friends.add(new Friend(d.getKey()));
+                            linearLayout_friends.setVisibility(View.VISIBLE);
+                            System.out.println(friends.size() + " amigos");
+                        }
+                    }
+                    friendRequestAdapter.notifyDataSetChanged();
+                    friendAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } else {
+            mDatabaseFriendRequest.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.child(LOGGEDUSERID).exists() && dataSnapshot.child(LOGGEDUSERID).getValue().equals(true))
+                    {
+                        IS_FRIEND = true;
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -215,7 +304,15 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
+        mAuth = FirebaseAuth.getInstance();
+        LOGGEDUSERID = mAuth.getCurrentUser().getUid();
+        friendRequest = new ArrayList();
+        friends = new ArrayList();
+        friendRequestAdapter = new FriendAdapter(getContext(), friendRequest, getFragmentManager());
+        friendAdapter = new FriendAdapter(getContext(), friends, getFragmentManager());
+        linearLayout_friends = (LinearLayout) view.findViewById(R.id.Linearlayout_friends);
+        linearLayout_requests = (LinearLayout) view.findViewById(R.id.Linearlayout_requests);
+        linear_gallery = (LinearLayout) view.findViewById(R.id.Linearlayout_gallery);
         username = (TextView) view.findViewById(R.id.username_profileFragment);
         userdesc = (TextView) view.findViewById(R.id.userdesc_profileFragment);
         userpic = (ImageView) view.findViewById(R.id.pic_profileFragment);
@@ -227,9 +324,20 @@ public class ProfileFragment extends Fragment {
         button_declineFriend = (ImageButton) view.findViewById(R.id.button_decline_friend);
         button_cancelfriend = (ImageButton) view.findViewById(R.id.button_cancel_friend);
         button_privatemessage = (ImageButton) view.findViewById(R.id.button_private_message);
+
+        mRecyclerViewRequest = (RecyclerView) view.findViewById(R.id.Recyclerview_requests);
+        mRecyclerViewRequest.setHasFixedSize(true);
+        mRecyclerViewRequest.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mRecyclerViewFriends = (RecyclerView) view.findViewById(R.id.Recyclerview_friends);
+        mRecyclerViewFriends.setHasFixedSize(true);
+        mRecyclerViewFriends.setLayoutManager(new LinearLayoutManager(getContext()));
+
         mRecyclerViewUserPost = (RecyclerView) view.findViewById(R.id.Recyclerview_profile);
         mRecyclerViewUserPost.setHasFixedSize(true);
         mRecyclerViewUserPost.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
         mProgress = new ProgressDialog(getContext());
         edit_desc = (EditText) view.findViewById(R.id.editText_description_profileFragment);
         button_desc.setOnClickListener(new View.OnClickListener() {
@@ -246,11 +354,14 @@ public class ProfileFragment extends Fragment {
 
                 clicked = true;
 
-                mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+                mDatabaseFriends.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
+
                         if (clicked) {
-                            if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("friends").child(userID).getValue().equals(true)) {
+                            if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child(userID).getValue().equals("waiting") ||
+                                    dataSnapshot.child(mAuth.getCurrentUser().getUid()).child(userID).getValue().equals(true)) {
 /*
                                             CANCELAR UNA SOLICITUD DE AMISTAD
  */
@@ -260,11 +371,11 @@ public class ProfileFragment extends Fragment {
                                         switch (which) {
                                             case DialogInterface.BUTTON_POSITIVE:
                                                 //Yes button clicked
-                                                mDatabaseUsers.child(userID).child("friends")
+                                                mDatabaseFriends.child(userID)
                                                         .child(mAuth.getCurrentUser().getUid())
                                                         .setValue(false);
 
-                                                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("friends")
+                                                mDatabaseFriends.child(mAuth.getCurrentUser().getUid())
                                                         .child(userID)
                                                         .setValue(false);
 
@@ -279,7 +390,7 @@ public class ProfileFragment extends Fragment {
                                 };
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                if (dataSnapshot.child(userID).child("friends").child(mAuth.getCurrentUser().getUid()).getValue().equals(true)) {
+                                if (dataSnapshot.child(userID).child(mAuth.getCurrentUser().getUid()).getValue().equals("waiting")) {
                                     builder.setMessage("Cancel friendship\nAre you sure?").setPositiveButton("Yes", dialogClickListener)
                                             .setNegativeButton("No", dialogClickListener).show();
                                 } else {
@@ -307,17 +418,22 @@ public class ProfileFragment extends Fragment {
 
                 clicked = true;
 
-                mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+                mDatabaseFriends.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (clicked) {
-                            if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("friends").child(userID).getValue().equals("pending")) {
+                            if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child(userID).getValue().equals("pending")) {
 /*
                                             ACEPTAR UNA SOLICITUD DE AMISTAD
  */
-                                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("friends")
+                                mDatabaseFriends.child(mAuth.getCurrentUser().getUid())
                                         .child(userID)
                                         .setValue(true);
+
+                                mDatabaseFriends.child(userID)
+                                        .child(mAuth.getCurrentUser().getUid())
+                                        .setValue(true);
+
 
                                 Toast.makeText(getContext(), "Request accepted", Toast.LENGTH_SHORT).show();
                             }
@@ -339,14 +455,13 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 clicked = true;
-                mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+                mDatabaseFriends.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (clicked) {
-                            if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("friends").child(userID).getValue().equals("pending")) {
+                            if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child(userID).getValue().equals("pending")) {
 /*
                                             RECHAZAR UNA SOLICITUD DE AMISTAD
-
  */
                                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                                     @Override
@@ -355,9 +470,13 @@ public class ProfileFragment extends Fragment {
                                             case DialogInterface.BUTTON_POSITIVE:
                                                 //Yes button clicked
 
-                                                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("friends")
+                                                mDatabaseFriends.child(mAuth.getCurrentUser().getUid())
                                                         .child(userID)
                                                         .setValue(false);
+
+                                                mDatabaseFriends.child(userID)
+                                                        .child(mAuth.getCurrentUser().getUid())
+                                                        .setValue("declined");
 
                                                 Toast.makeText(getContext(), "Request declined", Toast.LENGTH_SHORT).show();
                                                 break;
@@ -392,14 +511,14 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 clicked = true;
                 //TODO add friend script
-                mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+                mDatabaseFriends.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         if (clicked) {
 
-                            if (!dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("friends").child(userID).exists() ||
-                                    (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("friends").child(userID).getValue().equals(false))) {
+                            if (!dataSnapshot.child(mAuth.getCurrentUser().getUid()).child(userID).exists() ||
+                                    (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child(userID).getValue().equals(false))) {
 /*
                                             ENVIAR UNA SOLICITUD DE AMISTAD
  */
@@ -410,11 +529,11 @@ public class ProfileFragment extends Fragment {
                                         switch (which) {
                                             case DialogInterface.BUTTON_POSITIVE:
                                                 //Yes button clicked
-                                                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("friends")
+                                                mDatabaseFriends.child(mAuth.getCurrentUser().getUid())
                                                         .child(userID)
-                                                        .setValue(true);
+                                                        .setValue("waiting");
 
-                                                mDatabaseUsers.child(userID).child("friends")
+                                                mDatabaseFriends.child(userID)
                                                         .child(mAuth.getCurrentUser().getUid())
                                                         .setValue("pending");
 
@@ -485,20 +604,16 @@ public class ProfileFragment extends Fragment {
         button_declineFriend.setVisibility(View.GONE);
         button_addfriend.setVisibility(View.GONE);
 
-        mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+        mDatabaseFriends.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("friends").child(userID).exists() &&
-                        dataSnapshot.child(userID).child("friends").child(mAuth.getCurrentUser().getUid()).exists()) {
-                    //relacion en bdat creada
-
-
-                    if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("friends").child(userID).getValue().equals(true)) {
-                        //solicitud enviada
+                if (!mAuth.getCurrentUser().getUid().equals(userID)) {
+                    if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child(userID).exists() &&
+                            dataSnapshot.child(userID).child(mAuth.getCurrentUser().getUid()).exists()) {
+                        //relacion en bdat creada
 
 
-                        if (dataSnapshot.child(userID).child("friends").child(mAuth.getCurrentUser().getUid()).getValue().equals("pending")) {
+                        if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child(userID).getValue().equals("waiting")) {
                             //solicitud  pendiente de acceptar por el otro usuario
 
                             button_cancelfriend.setVisibility(View.VISIBLE);
@@ -507,7 +622,7 @@ public class ProfileFragment extends Fragment {
                             button_addfriend.setVisibility(View.GONE);
 
                         }
-                        if (dataSnapshot.child(userID).child("friends").child(mAuth.getCurrentUser().getUid()).getValue().equals(false)) {
+                        if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child(userID).getValue().equals("declined")) {
                             //solicitud rechazada por el otro usuario
 
                             button_cancelfriend.setVisibility(View.GONE);
@@ -516,7 +631,7 @@ public class ProfileFragment extends Fragment {
                             button_addfriend.setVisibility(View.GONE);
 
                         }
-                        if (dataSnapshot.child(userID).child("friends").child(mAuth.getCurrentUser().getUid()).getValue().equals(true)) {
+                        if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child(userID).getValue().equals(true)) {
                             //solicitud aceptada ambas partes (usuarios amigos)
 
                             button_cancelfriend.setVisibility(View.VISIBLE);
@@ -526,35 +641,30 @@ public class ProfileFragment extends Fragment {
 
                         }
 
-                    }
+                        if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child(userID).getValue().equals(false)) {
+                            //solicitud cancelada por usuario actual
 
-                    if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("friends").child(userID).getValue().equals(false)) {
-                        //solicitud cancelada por usuario actual
+                            button_cancelfriend.setVisibility(View.GONE);
+                            button_acceptFriend.setVisibility(View.GONE);
+                            button_declineFriend.setVisibility(View.GONE);
+                            button_addfriend.setVisibility(View.VISIBLE);
 
-                        button_cancelfriend.setVisibility(View.GONE);
-                        button_acceptFriend.setVisibility(View.GONE);
-                        button_declineFriend.setVisibility(View.GONE);
+                        }
+                        if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child(userID).getValue().equals("pending")) {
+                            //usuario actual tiene solicitud pendiente
+
+                            button_cancelfriend.setVisibility(View.GONE);
+                            button_acceptFriend.setVisibility(View.VISIBLE);
+                            button_declineFriend.setVisibility(View.VISIBLE);
+                            button_addfriend.setVisibility(View.GONE);
+
+                        }
+
+                    } else {
                         button_addfriend.setVisibility(View.VISIBLE);
-
                     }
-                    if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("friends").child(userID).getValue().equals("pending")) {
-                        //usuario actual tiene solicitud pendiente
-
-                        button_cancelfriend.setVisibility(View.GONE);
-                        button_acceptFriend.setVisibility(View.VISIBLE);
-                        button_declineFriend.setVisibility(View.VISIBLE);
-                        button_addfriend.setVisibility(View.GONE);
-
-                    }
-
-                } else {
-                    //solicitud inexistente
-
-                    button_addfriend.setVisibility(View.VISIBLE);
                 }
-
             }
-
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

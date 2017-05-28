@@ -68,6 +68,7 @@
                     android:layout_height="50dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_person_add_black_24dp" />
+
                 <ImageButton
                     android:id="@+id/button_cancel_friend"
                     android:layout_width="50dp"
@@ -137,51 +138,101 @@
                 android:text="" />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/Linearlayout_requests"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:text="Friends"
-            android:textStyle="italic" />
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="New friend requests"
+                android:textStyle="italic" />
 
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="5dp"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_margin="5dp"
 
-            android:background="@color/colorAccent" />
+                android:background="@color/colorAccent" />
 
-        <!--   <android.support.v7.widget.RecyclerView
-               android:id="@+id/Recyclerview_friends"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_gravity="center_horizontal"
-               android:layout_margin="10dp"
-               android:foregroundGravity="center_horizontal"
-               android:scrollbars="none" /> -->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/Recyclerview_requests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:foregroundGravity="center_horizontal"
+                android:scrollbars="none" />
 
-        <TextView
-            android:layout_width="match_parent"
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/Linearlayout_friends"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Gallery"
-            android:textStyle="italic" />
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="5dp"
-            android:background="@color/colorAccent" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Friends"
+                android:textStyle="italic" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/Recyclerview_profile"
-            android:layout_width="match_parent"
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_margin="5dp"
+
+                android:background="@color/colorAccent" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/Recyclerview_friends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:foregroundGravity="center_horizontal"
+                android:scrollbars="none" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/Linearlayout_gallery"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
-            android:foregroundGravity="center_horizontal"
-            android:scrollbars="none" />
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Gallery"
+                android:textStyle="italic" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_margin="5dp"
+                android:background="@color/colorAccent" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/Recyclerview_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:foregroundGravity="center_horizontal"
+                android:scrollbars="none" />
+        </LinearLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

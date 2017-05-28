@@ -578,6 +578,7 @@ public class MainActivity extends AppCompatActivity
                         current_user_db.child("Name").setValue(auth.getCurrentUser().getDisplayName());
                         current_user_db.child("Image").setValue(auth.getCurrentUser().getPhotoUrl().toString());
                         current_user_db.child("Email").setValue(auth.getCurrentUser().getEmail());
+                        current_user_db.child("UserId").setValue(auth.getCurrentUser().getUid());
                     } catch (Exception er) {
                         System.out.println(er.toString());
                     }
