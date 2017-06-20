@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#80C6FF</color>
     <color name="colorPrimaryDark">#002A4d</color>
-    <color name="colorAccent">#FFFF</color>
+    <color name="colorAccent">#FF9800</color>
 
     <!-- shadow colors -->
     <color name="light_font">#FBFBFB</color>

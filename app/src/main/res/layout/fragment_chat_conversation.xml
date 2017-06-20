@@ -87,8 +87,8 @@
             android:layout_weight="1"
             android:hint="Write a message..."
             android:maxHeight="80dp"
-            android:textColor="#424242"
-            android:textColorHint="#CFD8DC" />
+            android:textColor="#FFFF"
+            android:textColorHint="#CECECE" />
 
         <ImageView
             android:id="@+id/sendButton"

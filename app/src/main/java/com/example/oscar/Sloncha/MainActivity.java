@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -184,11 +185,55 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         nav_username = (TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_name);
         nav_email = (TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_mail);
         nav_profile_picture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.imageViewProfile);
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        /**
+         * start of code configuration for color of text of your Navigation Drawer / Menu based on state
+         */
+        int[][] state = new int[][] {
+                new int[] {-android.R.attr.state_enabled}, // disabled
+                new int[] {android.R.attr.state_enabled}, // enabled
+                new int[] {-android.R.attr.state_checked}, // unchecked
+                new int[] { android.R.attr.state_pressed}  // pressed
+
+        };
+
+        int[] color = new int[] {
+                Color.WHITE,
+                Color.WHITE,
+                Color.WHITE,
+                Color.WHITE
+        };
+
+        ColorStateList colorStateList1 = new ColorStateList(state, color);
+
+
+        // FOR NAVIGATION VIEW ITEM ICON COLOR
+        int[][] states = new int[][] {
+                new int[] {-android.R.attr.state_enabled}, // disabled
+                new int[] {android.R.attr.state_enabled}, // enabled
+                new int[] {-android.R.attr.state_checked}, // unchecked
+                new int[] { android.R.attr.state_pressed}  // pressed
+
+        };
+
+        int[] colors = new int[] {
+                Color.WHITE,
+                Color.WHITE,
+                Color.WHITE,
+                Color.WHITE
+        };
+        ColorStateList colorStateList2 = new ColorStateList(states, colors);
+        navigationView.setItemTextColor(colorStateList1);
+        navigationView.setItemIconTintList(colorStateList2);
+        /**
+         * end of code configuration for color of text of your Navigation Drawer / Menu based on state
+         */
 
     }
 

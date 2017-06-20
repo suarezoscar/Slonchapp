@@ -49,7 +49,7 @@
                     android:fontFamily="sans-serif-smallcaps"
                     android:gravity="center"
                     android:text="Title goes here"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="30sp"
                     android:typeface="sans" />
             </LinearLayout>

@@ -160,7 +160,7 @@
                 android:layout_height="0.5dp"
                 android:layout_margin="5dp"
 
-                android:background="@color/colorAccent" />
+                android:background="@color/colorPrimaryDark" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/Recyclerview_requests"
@@ -194,7 +194,7 @@
                 android:layout_height="0.5dp"
                 android:layout_margin="5dp"
 
-                android:background="@color/colorAccent" />
+                android:background="@color/colorPrimaryDark" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/Recyclerview_friends"
@@ -223,7 +223,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_margin="5dp"
-                android:background="@color/colorAccent" />
+                android:background="@color/colorPrimaryDark" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/Recyclerview_gallery"
