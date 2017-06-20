@@ -3,26 +3,29 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_people"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
+        <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_menu_profile"
-            android:title="Profile" />
-        <item
-            android:id="@+id/nav_people"
-            android:icon="@drawable/ic_people_black_24dp"
-            android:title="People" />
+            android:title="My profile" />
         <item
             android:id="@+id/nav_categories"
             android:icon="@drawable/ic_remove_red_eye_black_24dp"
             android:title="Categories" />
         <item
-            android:id="@+id/nav_share"
-            android:icon="@drawable/ic_menu_share"
-            android:title="Share" />
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/messenger_bubble_small_blue"
+            android:title="Messages" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:title="Logout" />
     </group>
-    <item android:title="@string/version"></item>
+
+    <group android:checkableBehavior="none">
+        <item android:title="@string/version"></item>
+    </group>
 </menu>
 

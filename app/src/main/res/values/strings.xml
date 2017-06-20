@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Whats Up</string>
+    <string name="app_name">SLONCHApp</string>
     <string name="facebook_application_id" translatable="false">171201676736674</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -8,5 +8,17 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="version">Whats Up - ver: 0.3.0</string>
+    <string name="version">SLONCHApp - ver: 0.9.5</string>
+    <string name="you_chat_message">You</string>
+    <string name="what_do_you_have_in_mind">Tell us something nice :)</string>
+
+    <string-array name="Categories">
+        <item>People</item>
+        <item>Party</item>
+        <item>Photography</item>
+        <item>Food</item>
+        <item>Travel</item>
+        <item>Games</item>
+        <item>Animals</item>
+    </string-array>
 </resources>

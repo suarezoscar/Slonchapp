@@ -5,9 +5,9 @@
     android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_dark_background"
+    android:background="@drawable/chat_background"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.oscar.realnews.MainActivity"
+    tools:context="com.example.oscar.Sloncha.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <android.support.v7.widget.RecyclerView

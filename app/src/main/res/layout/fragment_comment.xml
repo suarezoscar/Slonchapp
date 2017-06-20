@@ -2,9 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_light_background"
+    android:background="@color/tw__solid_white"
     android:orientation="vertical"
-    tools:context="com.example.oscar.realnews.CommentFragment">
+    tools:context="com.example.oscar.Sloncha.CommentFragment">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

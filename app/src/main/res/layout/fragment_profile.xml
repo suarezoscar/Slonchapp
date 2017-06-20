@@ -6,7 +6,7 @@
     android:background="@color/tw__solid_white"
     android:orientation="vertical"
     android:scrollbars="none"
-    tools:context="com.example.oscar.realnews.ProfileFragment">
+    tools:context="com.example.oscar.Sloncha.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -95,7 +95,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_chat_black_24dp" />
+                    android:src="@drawable/ic_chat_black_24dp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -112,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:hint="What do you have in mind?"
+                    android:hint="@string/what_do_you_have_in_mind"
                     android:maxLength="140" />
 
                 <ImageButton
@@ -209,8 +210,7 @@
             android:id="@+id/Linearlayout_gallery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
@@ -226,13 +226,22 @@
                 android:background="@color/colorAccent" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/Recyclerview_profile"
+                android:id="@+id/Recyclerview_gallery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="10dp"
                 android:foregroundGravity="center_horizontal"
-                android:scrollbars="none" />
+                android:scrollbars="none"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/ImageView_imageLocked"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_locked" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

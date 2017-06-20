@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    tools:context="com.example.oscar.realnews.PostFragment">
+    tools:context="com.example.oscar.Sloncha.PostFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,8 +26,8 @@
 
                 <ImageView
                     android:id="@+id/image_frame"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@mipmap/ic_launcher" />
                 >
@@ -67,6 +67,14 @@
                     android:soundEffectsEnabled="true"
                     android:src="@drawable/ic_insert_photo_black_24dp" />
             </LinearLayout>
+
+            <Spinner
+                android:id="@+id/spinner_categories"
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:layout_margin="10dp"
+                android:background="@drawable/input_outline"
+                android:padding="15dp" />
 
             <EditText
                 android:id="@+id/editText_title_news"

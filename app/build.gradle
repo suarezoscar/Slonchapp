@@ -11,6 +11,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [onesignal_app_id               : "45820594-aea7-4600-b522-b50a76699cb7",
+                                // Project number pulled from dashboard, local value is ignored.
+                                onesignal_google_project_number: "REMOTE"]
     }
     buildTypes {
         release {
@@ -26,8 +29,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 //
-
-
+    compile 'com.google.android.gms:play-services:10.2.0'
+    compile 'com.onesignal:OneSignal:[3.5.3,4.0.0)'
     compile 'com.google.firebase:firebase-core:10.2.0'
     compile 'com.google.firebase:firebase-database:10.2.0'
     compile 'com.google.firebase:firebase-storage:10.2.0'
@@ -45,6 +48,9 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.4.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'me.srodrigo:androidhintspinner:1.0.0'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
