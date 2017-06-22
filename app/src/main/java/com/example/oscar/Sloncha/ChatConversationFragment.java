@@ -50,11 +50,10 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static android.media.MediaRecorder.VideoSource.CAMERA;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
@@ -89,7 +88,7 @@ public class ChatConversationFragment extends Fragment {
     TextView no_chat;
     ProgressBar progressBar;
     Uri mImageUri = Uri.EMPTY;
-    String[] permisions;
+
     private FirebaseAuth mAuth;
     private ImageView profile_pic;
     private String pictureImagePath = "";
@@ -151,7 +150,7 @@ public class ChatConversationFragment extends Fragment {
                                 String retrieve_image_url = dataSnapshot.child("message").getValue(String.class);
                                 if (retrieve_image_url.startsWith("https")) {
                                     //Toast.makeText(ChatConversationActivity.this, "URL : " + retrieve_image_url, Toast.LENGTH_SHORT).show();
-                                    Intent intent = (new Intent(getContext(), EnlargeImageView.class));
+                                    Intent intent = (new Intent(getContext(), com.example.oscar.Sloncha.EnlargeImageView.class));
                                     intent.putExtra("url", retrieve_image_url);
                                     startActivity(intent);
                                 }
@@ -307,7 +306,14 @@ public class ChatConversationFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (options[which].equals("Camera")) {
-                            if (checkedPermissions()) {
+                            if (ContextCompat.checkSelfPermission(getContext(),
+                                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.CAMERA},
+                                        CAMERA);
+
+                            } else {
                                 callCamera();
                             }
                         }
@@ -327,8 +333,9 @@ public class ChatConversationFragment extends Fragment {
                         }
                     }
                 });
-
+                builder.show();
             }
+
         });
 
         if (ContextCompat.checkSelfPermission(getContext(),
@@ -382,22 +389,6 @@ public class ChatConversationFragment extends Fragment {
 
 
         return v;
-    }
-
-    private boolean checkedPermissions() {
-        int result;
-        List<String> listPermissionNeeded = new ArrayList<>();
-        for (String p : permisions) {
-            result = ContextCompat.checkSelfPermission(getContext(), p);
-            if (result != PackageManager.PERMISSION_GRANTED) {
-                listPermissionNeeded.add(p);
-            }
-        }
-        if (!listPermissionNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(getActivity(), listPermissionNeeded.toArray(new String[listPermissionNeeded.size()]), MULTIPLE_PERMISIONS);
-            return false;
-        }
-        return true;
     }
 
     @Override
@@ -475,7 +466,7 @@ public class ChatConversationFragment extends Fragment {
 
                     ArrayMap<String, String> map = new ArrayMap<>();
                     map.put("message", downloadUri.toString());
-                    map.put("sender", mAuth.getCurrentUser().getEmail());
+                    map.put("sender", mAuth.getCurrentUser().getUid());
                     map.put("DateTime", dateFormat.format(date));
                     myref1.push().setValue(map);
                     myref2.push().setValue(map);
@@ -508,7 +499,7 @@ public class ChatConversationFragment extends Fragment {
 
                         ArrayMap<String, String> map = new ArrayMap<>();
                         map.put("message", downloadUri.toString());
-                        map.put("sender", mAuth.getCurrentUser().getEmail());
+                        map.put("sender", mAuth.getCurrentUser().getUid());
                         map.put("DateTime", dateFormat.format(date));
                         myref1.push().setValue(map);
                         myref2.push().setValue(map);
@@ -585,11 +576,13 @@ public class ChatConversationFragment extends Fragment {
         View mView;
         LinearLayout layout;
         LinearLayout layoutdir;
+        FirebaseAuth mAuth;
 
 
         public ChatConversation_ViewHolder(final View itemView) {
             super(itemView);
             //Log.d("LOGGED", "ON Chat_Conversation_ViewHolder : " );
+            mAuth = FirebaseAuth.getInstance();
             mView = itemView;
             message = (TextView) mView.findViewById(R.id.fetch_chat_messgae);
             sender = (TextView) mView.findViewById(R.id.fetch_chat_sender);
@@ -605,52 +598,55 @@ public class ChatConversationFragment extends Fragment {
 
         private void getSender(String title, String uid, final String DateTime) {
 
-            System.out.println("TITLE " + title);
+            try {
 
-            if (uid.equals(title)) {
-                //Log.d("LOGGED", "getSender: ");
-                params.setMargins((MainActivity.Device_Width / 8), 5, 10, 20);
-                mView.setLayoutParams(params);
-                mView.setBackgroundResource(R.drawable.shape_outcoming_message);
-                mDatabaseUsers.child(title).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        System.out.println(dataSnapshot.child("Image").getValue(String.class));
-                        Picasso.with(getApplicationContext()).load(dataSnapshot.child("Image").getValue().toString()).transform(new CircleTransform()).into(chat_image_profilepic);
-                    }
+                if (uid.equals(title)) {
+                    //Log.d("LOGGED", "getSender: ");
+                    params.setMargins((MainActivity.Device_Width / 8), 5, 10, 20);
+                    mView.setLayoutParams(params);
+                    mView.setBackgroundResource(R.drawable.shape_outcoming_message);
+                    mDatabaseUsers.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            System.out.println(dataSnapshot.child("Image").getValue(String.class));
+                            Picasso.with(getApplicationContext()).load(dataSnapshot.child("Image").getValue().toString()).transform(new CircleTransform()).into(chat_image_profilepic);
+                        }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
-                sender.setText(R.string.you_chat_message);
-                datetime.setText(DateTime);
-                chat_image_outgoing.setVisibility(View.VISIBLE);
-                chat_image_incoming.setVisibility(View.GONE);
+                        }
+                    });
+                    sender.setText(R.string.you_chat_message);
+                    datetime.setText(DateTime);
+                    chat_image_outgoing.setVisibility(View.VISIBLE);
+                    chat_image_incoming.setVisibility(View.GONE);
 
-            } else {
-                params.setMargins(10, 5, (MainActivity.Device_Width / 8), 20);
-                sender.setGravity(Gravity.START);
-                mView.setLayoutParams(params);
-                mView.setBackgroundResource(R.drawable.shape_incoming_message);
-                mDatabaseUsers.child(title).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        sender.setText(dataSnapshot.child("Name").getValue().toString().split(" ")[0]);
-                        datetime.setText(DateTime);
-                        Picasso.with(getApplicationContext()).load(dataSnapshot.child("Image").getValue().toString()).transform(new CircleTransform()).into(chat_image_profilepic);
-                    }
+                } else {
+                    params.setMargins(10, 5, (MainActivity.Device_Width / 8), 20);
+                    sender.setGravity(Gravity.START);
+                    mView.setLayoutParams(params);
+                    mView.setBackgroundResource(R.drawable.shape_incoming_message);
+                    mDatabaseUsers.child(title).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            sender.setText(dataSnapshot.child("Name").getValue().toString().split(" ")[0]);
+                            datetime.setText(DateTime);
+                            Picasso.with(getApplicationContext()).load(dataSnapshot.child("Image").getValue().toString()).transform(new CircleTransform()).into(chat_image_profilepic);
+                        }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+                        }
+                    });
 
+                    chat_image_outgoing.setVisibility(View.GONE);
+                    chat_image_incoming.setVisibility(View.VISIBLE);
+                }
 
-                chat_image_outgoing.setVisibility(View.GONE);
-                chat_image_incoming.setVisibility(View.VISIBLE);
+            } catch (Exception er) {
+                System.out.println("GETSENDER ERROR: " + er);
             }
         }
 

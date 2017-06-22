@@ -195,15 +195,15 @@ public class MainActivity extends AppCompatActivity
         /**
          * start of code configuration for color of text of your Navigation Drawer / Menu based on state
          */
-        int[][] state = new int[][] {
-                new int[] {-android.R.attr.state_enabled}, // disabled
-                new int[] {android.R.attr.state_enabled}, // enabled
-                new int[] {-android.R.attr.state_checked}, // unchecked
-                new int[] { android.R.attr.state_pressed}  // pressed
+        int[][] state = new int[][]{
+                new int[]{-android.R.attr.state_enabled}, // disabled
+                new int[]{android.R.attr.state_enabled}, // enabled
+                new int[]{-android.R.attr.state_checked}, // unchecked
+                new int[]{android.R.attr.state_pressed}  // pressed
 
         };
 
-        int[] color = new int[] {
+        int[] color = new int[]{
                 Color.WHITE,
                 Color.WHITE,
                 Color.WHITE,
@@ -214,15 +214,15 @@ public class MainActivity extends AppCompatActivity
 
 
         // FOR NAVIGATION VIEW ITEM ICON COLOR
-        int[][] states = new int[][] {
-                new int[] {-android.R.attr.state_enabled}, // disabled
-                new int[] {android.R.attr.state_enabled}, // enabled
-                new int[] {-android.R.attr.state_checked}, // unchecked
-                new int[] { android.R.attr.state_pressed}  // pressed
+        int[][] states = new int[][]{
+                new int[]{-android.R.attr.state_enabled}, // disabled
+                new int[]{android.R.attr.state_enabled}, // enabled
+                new int[]{-android.R.attr.state_checked}, // unchecked
+                new int[]{android.R.attr.state_pressed}  // pressed
 
         };
 
-        int[] colors = new int[] {
+        int[] colors = new int[]{
                 Color.WHITE,
                 Color.WHITE,
                 Color.WHITE,
@@ -1170,18 +1170,22 @@ public class MainActivity extends AppCompatActivity
         user_exist.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                //   if (!snapshot.hasChild(auth.getCurrentUser().getUid())) {
-                DatabaseReference current_user_db = mDataUsers.child(auth.getCurrentUser().getUid());
-                try {
-                    current_user_db.child("Name").setValue(auth.getCurrentUser().getDisplayName());
-                    current_user_db.child("Image").setValue(auth.getCurrentUser().getPhotoUrl().toString());
-                    current_user_db.child("Email").setValue(auth.getCurrentUser().getEmail());
-                    current_user_db.child("UserId").setValue(auth.getCurrentUser().getUid());
-                    current_user_db.child("NotificationId").setValue(NOTIFICATION_ID);
-                } catch (Exception er) {
-                    System.out.println(er.toString());
+                if (!snapshot.hasChild(auth.getCurrentUser().getUid())) {
+                    DatabaseReference current_user_db = mDataUsers.child(auth.getCurrentUser().getUid());
+                    try {
+                        current_user_db.child("Name").setValue(auth.getCurrentUser().getDisplayName());
+                        current_user_db.child("Email").setValue(auth.getCurrentUser().getEmail());
+                        current_user_db.child("UserId").setValue(auth.getCurrentUser().getUid());
+                        if (auth.getCurrentUser().getPhotoUrl() == null) {
+                            current_user_db.child("Image").setValue("https://firebasestorage.googleapis.com/v0/b/realnews-18145.appspot.com/o/noavatar.png?alt=media&token=8ef818ac-e3b3-45e9-9d73-0e065129799a");
+                        } else {
+                            current_user_db.child("Image").setValue(auth.getCurrentUser().getPhotoUrl().toString());
+                        }
+
+                    } catch (Exception er) {
+                        System.out.println(er.toString());
+                    }
                 }
-                //   }
             }
 
             @Override
@@ -1193,7 +1197,7 @@ public class MainActivity extends AppCompatActivity
         nav_username.setText(auth.getCurrentUser().getDisplayName());
         nav_email.setText(auth.getCurrentUser().getEmail());
         if (auth.getCurrentUser().getPhotoUrl() == null) {
-            Picasso.with(getBaseContext()).load("http://lorempixel.com/200/200/cats /").into(nav_profile_picture);
+            Picasso.with(getBaseContext()).load("https://firebasestorage.googleapis.com/v0/b/realnews-18145.appspot.com/o/noavatar.png?alt=media&token=8ef818ac-e3b3-45e9-9d73-0e065129799a").into(nav_profile_picture);
         } else {
             Picasso.with(getBaseContext()).load(auth.getCurrentUser().getPhotoUrl()).into(nav_profile_picture);
         }

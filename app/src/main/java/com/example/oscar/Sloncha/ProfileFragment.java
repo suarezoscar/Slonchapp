@@ -230,11 +230,19 @@ public class ProfileFragment extends Fragment {
 
                         if (d.child("userId").getValue(String.class).equals(profile_userID)) {
 
-                            galleryList.add(new Gallery(
-                                    d.getKey().toString(),
-                                    d.child("image").getValue().toString(),
-                                    d.child("userId").getValue().toString()
-                            ));
+                            try {
+
+                                galleryList.add(new Gallery(
+                                        d.getKey().toString(),
+                                        d.child("image").getValue().toString(),
+                                        d.child("userId").getValue().toString()
+                                ));
+
+                            } catch (Exception er) {
+
+                                System.out.println(er.toString());
+                                
+                            }
 
                         }
                     }
